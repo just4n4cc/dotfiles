@@ -1,0 +1,11 @@
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+
+[user]
+  email = a.korchevsky@iva-tech.ru
+  name = a.korchevsky
+
+[core]
+	excludesFile = ~/.gitignore
