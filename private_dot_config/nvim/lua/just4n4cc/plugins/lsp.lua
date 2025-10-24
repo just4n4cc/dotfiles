@@ -43,7 +43,7 @@ return {
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 
 			-- Useful status updates for LSP.
-			{ "j-hui/fidget.nvim", opts = {} },
+			-- { "j-hui/fidget.nvim", opts = {} },
 
 			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
@@ -202,14 +202,14 @@ return {
 					-- code, if the language server you are using supports them
 					--
 					-- This may be unwanted, since they displace some of your code
-					if
-						client
-						and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf)
-					then
-						map("<leader>th", function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-						end, "[T]oggle Inlay [H]ints")
-					end
+					-- if
+					-- 	client
+					-- 	and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf)
+					-- then
+					-- 	-- map("<leader>th", function()
+					-- 	-- 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+					-- 	-- end, "[T]oggle Inlay [H]ints")
+					-- end
 				end,
 			})
 
@@ -261,7 +261,7 @@ return {
 			local servers = {
 				clangd = {},
 				-- gopls = {},
-				-- pyright = {},
+				pyright = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--

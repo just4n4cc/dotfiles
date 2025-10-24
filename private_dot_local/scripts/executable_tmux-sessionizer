@@ -3,7 +3,42 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/projects/ ~/work/ ~/work/imp-master/third_party ~/work/imp/third_party ~/ -mindepth 1 -maxdepth 1 -type d | fzf)
+    custom_dirs=(
+        ~/
+        ~/.config/nvim/
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc/src/
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc/src/third_party/
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc/src/third_party/opus/
+
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc_android/src/
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc_android/src/base
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc_android/src/third_party
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc_android/src/third_party/ffmpeg
+
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc_ios/src/
+        ~/work/i/ivawebrtc/scripts/third_party_scripts/webrtc_ios/src/third_party/opus/
+
+        # logs
+        /home/akorchevsky/.local/share/IVKS/ivaconnect/logs
+        /home/akorchevsky/.local/share/IVKS/ivaconnect-beta/logs
+        /home/akorchevsky/.local/share/IVKS/ivaconnect-dev/logs
+    )
+
+    find_dirs=(
+        ~/
+        ~/projects/
+        ~/work/l/
+        ~/work/i/
+        ~/work/i/third_party/
+        ~/work/i/external/
+        ~/work/p
+    )
+
+    selected=$(
+        (
+            printf "%s\n" "${custom_dirs[@]}"
+            find "${find_dirs[@]}" -mindepth 1 -maxdepth 1 -type d
+        ) | fzf)
 fi
 
 if [[ -z $selected ]]; then
@@ -13,14 +48,28 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
+# initial setup for workspace
+init_ws () {
+    # auto open nvim for projects
+    if echo $selected | grep -q -E "work|projects"; then
+        tmux neww -ad -c $selected -t $selected_name && xdotool type "v ." && xdotool key ctrl+j
+    fi
+}
+
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s $selected_name -c $selected
     exit 0
 fi
 
+opened="false"
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
     tmux new-session -ds $selected_name -c $selected
+    opened="true"
 fi
 
 tmux switch-client -t $selected_name
+
+if [[ $opened == "true" ]]; then
+    init_ws
+fi
 

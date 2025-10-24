@@ -70,6 +70,10 @@ plugins=(git colored-man-pages copybuffer copyfile copypath cp debian pip)
 
 source $ZSH/oh-my-zsh.sh
 
+# Add zsh autosuggestions plugin
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+bindkey '^ ' autosuggest-accept  # ctrl + space
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -100,6 +104,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias v="nvim"
 alias cat="batcat"
+alias pt="python3 -m pytest"
 
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.local/scripts:$PATH
 
@@ -110,14 +115,17 @@ bindkey -s ^f "tmux-sessionizer\n"
 export OMP_THREAD_LIMIT=1
 export  TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
 
-
+# Brew settings
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # override local bin over brew
-export PATH=/usr/local/bin:$PATH
+# export PATH=/usr/local/bin:$PATH
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
 
 # zoxide - smart cd
 eval "$(zoxide init --cmd cd zsh)"
 
 # pretty ssh in terminal
 alias ssh='env TERM=xterm-256color ssh'
-
